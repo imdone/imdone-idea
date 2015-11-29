@@ -1,0 +1,16 @@
+// TODO: [Building IntelliJ plugins from the command line | Xebia Blog](http://blog.xebia.com/building-intellij-plugins-from-the-command-line/)
+plugins {
+  id "org.jetbrains.intellij" version "0.0.31"
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'org.jetbrains.intellij'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'io.socket:engine.io-client:0.6.2'
+}

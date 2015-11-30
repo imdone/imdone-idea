@@ -43,4 +43,6 @@
     <!-- Add your actions here -->
   </actions>
 
+  <depends>com.intellij.modules.platform</depends>
+
 </idea-plugin>

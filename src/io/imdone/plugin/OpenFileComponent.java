@@ -5,16 +5,12 @@ import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorState;
-import com.intellij.openapi.fileEditor.FileEditorStateLevel;
 import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ex.ProjectManagerEx;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.ex.VirtualFileManagerEx;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.client.Socket;
 import org.jetbrains.annotations.NotNull;
@@ -30,13 +26,19 @@ public class OpenFileComponent implements ApplicationComponent {
     private static final int PORT = 9799;
     private Socket socket;
 
+    private interface Keys {
+        String PROJECT = "project";
+        String PATH    = "path";
+        String LINE    = "line";
+    }
+
     public OpenFileComponent() {
     }
 
     public void initComponent() {
-        // TODO:10 insert component initialization logic here
-        // TODO:20 [Quick Start Guide](http://www.jetbrains.org/intellij/sdk/docs/basics.html)
-        // TODO:30 [Running and Debugging a Plugin](http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/running_and_debugging_a_plugin.html)
+        // TODO:20 insert component initialization logic here
+        // TODO:30 [Quick Start Guide](http://www.jetbrains.org/intellij/sdk/docs/basics.html)
+        // TODO:0 [Running and Debugging a Plugin](http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/running_and_debugging_a_plugin.html)
         try {
             socket = new Socket("ws://localhost:" + PORT);
             socket.on(Socket.EVENT_OPEN, new Emitter.Listener() {
@@ -83,7 +85,7 @@ public class OpenFileComponent implements ApplicationComponent {
     }
 
     public void disposeComponent() {
-        // TODO:0 insert component disposal logic here
+        // TODO:10 insert component disposal logic here
         socket.close();
     }
 
@@ -104,9 +106,12 @@ public class OpenFileComponent implements ApplicationComponent {
                 FileEditor[] editors = FileEditorManagerEx.getInstanceEx(project).openFile(file, true);
                 for (FileEditor editor : editors) {
                     // DOING: Make sure we're working with a TextEditor
-                    LogicalPosition pos = new LogicalPosition(line, 0);
-                    ((TextEditor)editor).getEditor().getCaretModel().moveToLogicalPosition(pos);
-                    ((TextEditor)editor).getEditor().getScrollingModel().scrollToCaret(ScrollType.CENTER);
+                    if (editor instanceof TextEditor) {
+                        TextEditor textEditor = (TextEditor)editor;
+                        LogicalPosition pos = new LogicalPosition(line-1, 0);
+                        textEditor.getEditor().getCaretModel().moveToLogicalPosition(pos);
+                        textEditor.getEditor().getScrollingModel().scrollToCaret(ScrollType.CENTER);
+                    }
                 }
             }
         }
@@ -117,9 +122,9 @@ public class OpenFileComponent implements ApplicationComponent {
             @Override
             public void run() {
                 try {
-                    String project = msg.getString("project");
-                    String path = msg.getString("path");
-                    Integer line = msg.getInt("line");
+                    String project = msg.has(Keys.PROJECT) ? msg.getString(Keys.PROJECT) : null;
+                    String path = msg.has(Keys.PATH) ? msg.getString(Keys.PATH) : null;
+                    Integer line = msg.has(Keys.LINE) ? msg.getInt(Keys.LINE) : null;
                     if (project != null && path != null) {
                         openFile(project, path, line);
                     }
@@ -130,5 +135,4 @@ public class OpenFileComponent implements ApplicationComponent {
         });
 
     }
-
 }

@@ -3,6 +3,7 @@
     "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
+  "keepEmptyPriority": true,
   "code": {
     "include_lists": [
       "TODO",
@@ -36,5 +37,10 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
+  },
+  "sync": {
+    "id": "5a828a7ea843593de4b5972d",
+    "name": "imdone/imdone-idea",
+    "useImdoneioForPriority": true
   }
 }

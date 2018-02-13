@@ -36,9 +36,9 @@ public class OpenFileComponent implements ApplicationComponent {
     }
 
     public void initComponent() {
-        // TODO:20 insert component initialization logic here
-        // TODO:30 [Quick Start Guide](http://www.jetbrains.org/intellij/sdk/docs/basics.html)
-        // TODO:0 [Running and Debugging a Plugin](http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/running_and_debugging_a_plugin.html)
+        // TODO: insert component initialization logic here id:0 gh:1 ic:gh
+        // TODO: [Quick Start Guide](http://www.jetbrains.org/intellij/sdk/docs/basics.html) id:1 gh:2 ic:gh
+        // TODO: [Running and Debugging a Plugin](http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/running_and_debugging_a_plugin.html) id:3 gh:4 ic:gh
         try {
             socket = new Socket("ws://localhost:" + PORT);
             socket.on(Socket.EVENT_OPEN, new Emitter.Listener() {
@@ -85,7 +85,7 @@ public class OpenFileComponent implements ApplicationComponent {
     }
 
     public void disposeComponent() {
-        // TODO:10 insert component disposal logic here
+        // TODO: insert component disposal logic here id:2 gh:3 ic:gh
         socket.close();
     }
 
@@ -105,7 +105,7 @@ public class OpenFileComponent implements ApplicationComponent {
                 VirtualFile file = LocalFileSystem.getInstance().findFileByPath(path);
                 FileEditor[] editors = FileEditorManagerEx.getInstanceEx(project).openFile(file, true);
                 for (FileEditor editor : editors) {
-                    // DOING: Make sure we're working with a TextEditor
+                    // DOING: Make sure we're working with a TextEditor id:4 gh:5 ic:gh
                     if (editor instanceof TextEditor) {
                         TextEditor textEditor = (TextEditor)editor;
                         LogicalPosition pos = new LogicalPosition(line-1, 0);
